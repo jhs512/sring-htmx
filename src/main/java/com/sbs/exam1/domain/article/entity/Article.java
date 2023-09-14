@@ -1,14 +1,22 @@
 package com.sbs.exam1.domain.article.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.*;
 
-@Getter
-@AllArgsConstructor
+import static jakarta.persistence.GenerationType.IDENTITY;
+
+@Entity
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class Article {
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @EqualsAndHashCode.Exclude
     private String title;
 }
