@@ -1,0 +1,37 @@
+<script>
+    let lastId = 0;
+
+    function loadMore() {
+        fetch("listMore?lastId=" + lastId).then(function (response) {
+            return response.text();
+        }).then(function (text) {
+            if (text.trim().length == 0) {
+                alert("마지막 페이지입니다.");
+                return;
+            }
+
+            document.querySelector(".list-tbody").insertAdjacentHTML('afterend', text);
+        });
+    }
+</script>
+
+<div>
+    <h1>Article List</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+        </tr>
+        </thead>
+        <tbody class="list-tbody">
+        <tr th:each="article : ${articles}">
+            <td th:text="${article.id}"></td>
+            <td th:text="${article.title}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <button onclick="loadMore();">더 보기</button>
+    </div>
+</div>
