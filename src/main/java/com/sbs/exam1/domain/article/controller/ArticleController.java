@@ -37,24 +37,10 @@ public class ArticleController {
 
         StringBuilder sb = new StringBuilder();
 
-        for (Article article : articles) {
-            sb.append("<tr>");
-
-            sb.append("<td>");
-            sb.append(article.getId());
-            sb.append("</td>");
-
-            sb.append("<td>");
-            sb.append(article.getTitle());
-            sb.append("</td>");
-
-            sb.append("</tr>");
-        }
-
         return Map.of(
                 "resultCode", "S-1",
                 "msg", "성공",
-                "html", sb.toString(),
+                "data", articles,
                 "lastId", articles.get(articles.size() - 1).getId()
         );
     }

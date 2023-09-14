@@ -1,21 +1,37 @@
 <script>
     let lastId = 0;
 
+    const fetchArticles = lastId => fetch("listMore?lastId=" + lastId).then(response => response.json());
+
+    const showAlertOnLastPage = rs => {
+        if (rs.resultCode === 'S-2') {
+            alert("마지막 페이지입니다.");
+            throw new Error("End of pages");
+        }
+        return rs;
+    }
+
+    const generateHTML = articles =>
+        articles.map(article =>
+            `<tr>
+                <td>${article.id}</td>
+                <td>${article.title}</td>
+            </tr>`
+        ).join('');
+
+    const appendToTable = html => document.querySelector(".list-tbody").insertAdjacentHTML('beforeend', html);
+
     function loadMore() {
-        fetch("listMore?lastId=" + lastId).then(function (response) {
-            return response.json();
-        }).then(function (rs) {
-            const html = rs.html;
-
-            if (rs.resultCode == 'S-2') {
-                alert("마지막 페이지입니다.");
-                return;
-            }
-
-            document.querySelector(".list-tbody").insertAdjacentHTML('beforeend', html);
-
-            lastId = rs.lastId;
-        });
+        fetchArticles(lastId)
+            .then(showAlertOnLastPage)
+            .then(rs => {
+                const html = generateHTML(rs.data);
+                appendToTable(html);
+                lastId = rs.lastId;
+            })
+            .catch(error => {
+                // Handle error if needed
+            });
     }
 </script>
 
@@ -32,6 +48,9 @@
 
         </tbody>
     </table>
+    <script>
+        loadMore();
+    </script>
     <div>
         <button onclick="loadMore();">더 보기</button>
     </div>
