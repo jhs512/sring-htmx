@@ -29,15 +29,9 @@
         </tr>
         </thead>
         <tbody class="list-tbody">
-        <tr th:data-id="${article.id}" th:each="article : ${articles}">
-            <td th:text="${article.id}"></td>
-            <td th:text="${article.title}"></td>
-        </tr>
+
         </tbody>
     </table>
-    <script>
-        lastId = document.querySelector(".list-tbody tr:last-child").getAttribute("data-id");
-    </script>
     <div>
         <button onclick="loadMore();">더 보기</button>
     </div>

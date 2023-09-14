@@ -22,6 +22,9 @@ public class ArticleService {
 
     public List<Article> findLatestAfterId(int count, long lastId) {
         PageRequest pageRequest = PageRequest.of(0, count);
+
+        if ( lastId == 0 ) return articleRepository.findByOrderByIdDesc(pageRequest);
+
         return articleRepository.findByIdLessThanOrderByIdDesc(lastId, pageRequest);
     }
 

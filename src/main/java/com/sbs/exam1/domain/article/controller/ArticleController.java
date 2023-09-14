@@ -21,10 +21,6 @@ public class ArticleController {
 
     @GetMapping("/list")
     public String showList(Model model) {
-        List<Article> articles = articleService.findLatest(pageItemsCount);
-
-        model.addAttribute("articles", articles);
-
         return "usr/article/list";
     }
 
