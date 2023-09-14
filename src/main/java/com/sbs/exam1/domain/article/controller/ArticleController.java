@@ -4,7 +4,6 @@ import com.sbs.exam1.domain.article.entity.Article;
 import com.sbs.exam1.domain.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,13 +19,13 @@ public class ArticleController {
     private final int pageItemsCount = 50;
 
     @GetMapping("/list")
-    public String showList(Model model) {
+    public String showList() {
         return "usr/article/list";
     }
 
     @GetMapping("/listMore")
     @ResponseBody
-    public Map showListMore(long lastId, Model model) {
+    public Map showListMore(long lastId) {
         List<Article> articles = articleService.findLatestAfterId(pageItemsCount, lastId);
 
         if (articles.isEmpty())
@@ -34,8 +33,6 @@ public class ArticleController {
                     "resultCode", "S-2",
                     "msg", "성공"
             );
-
-        StringBuilder sb = new StringBuilder();
 
         return Map.of(
                 "resultCode", "S-1",
