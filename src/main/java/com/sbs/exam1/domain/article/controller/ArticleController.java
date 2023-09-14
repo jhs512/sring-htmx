@@ -10,16 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/article")
 @RequiredArgsConstructor
 public class ArticleController {
     private final ArticleService articleService;
+    private final int pageItemsCount = 50;
 
     @GetMapping("/list")
     public String showList(Model model) {
-        List<Article> articles = articleService.findAll();
+        List<Article> articles = articleService.findLatest(pageItemsCount);
+
         model.addAttribute("articles", articles);
 
         return "usr/article/list";
@@ -27,20 +30,36 @@ public class ArticleController {
 
     @GetMapping("/listMore")
     @ResponseBody
-    public String showListMore(Model model) {
-        return """
-                <tr>
-                    <td>1000</td>
-                    <td>제목 1000</td>
-                </tr>
-                <tr>
-                    <td>1001</td>
-                    <td>제목 1001</td>
-                </tr>
-                <tr>
-                    <td>1002</td>
-                    <td>제목 1002</td>
-                </tr>
-                """;
+    public Map showListMore(long lastId, Model model) {
+        List<Article> articles = articleService.findLatestAfterId(pageItemsCount, lastId);
+
+        if (articles.isEmpty())
+            return Map.of(
+                    "resultCode", "S-2",
+                    "msg", "성공"
+            );
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Article article : articles) {
+            sb.append("<tr>");
+
+            sb.append("<td>");
+            sb.append(article.getId());
+            sb.append("</td>");
+
+            sb.append("<td>");
+            sb.append(article.getTitle());
+            sb.append("</td>");
+
+            sb.append("</tr>");
+        }
+
+        return Map.of(
+                "resultCode", "S-1",
+                "msg", "성공",
+                "html", sb.toString(),
+                "lastId", articles.get(articles.size() - 1).getId()
+        );
     }
 }

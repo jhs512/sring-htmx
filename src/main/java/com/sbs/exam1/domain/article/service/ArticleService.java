@@ -15,4 +15,12 @@ public class ArticleService {
     public List<Article> findAll() {
         return articleRepository.findAll();
     }
+
+    public List<Article> findLatest(int count) {
+        return articleRepository.findLatest(count);
+    }
+
+    public List<Article> findLatestAfterId(int count, long lastId) {
+        return articleRepository.findLatestAfterId(count, lastId);
+    }
 }

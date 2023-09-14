@@ -3,14 +3,18 @@
 
     function loadMore() {
         fetch("listMore?lastId=" + lastId).then(function (response) {
-            return response.text();
-        }).then(function (text) {
-            if (text.trim().length == 0) {
+            return response.json();
+        }).then(function (rs) {
+            const html = rs.html;
+
+            if (rs.resultCode == 'S-2') {
                 alert("마지막 페이지입니다.");
                 return;
             }
 
-            document.querySelector(".list-tbody").insertAdjacentHTML('afterend', text);
+            document.querySelector(".list-tbody").insertAdjacentHTML('beforeend', html);
+
+            lastId = rs.lastId;
         });
     }
 </script>
@@ -25,12 +29,15 @@
         </tr>
         </thead>
         <tbody class="list-tbody">
-        <tr th:each="article : ${articles}">
+        <tr th:data-id="${article.id}" th:each="article : ${articles}">
             <td th:text="${article.id}"></td>
             <td th:text="${article.title}"></td>
         </tr>
         </tbody>
     </table>
+    <script>
+        lastId = document.querySelector(".list-tbody tr:last-child").getAttribute("data-id");
+    </script>
     <div>
         <button onclick="loadMore();">더 보기</button>
     </div>
