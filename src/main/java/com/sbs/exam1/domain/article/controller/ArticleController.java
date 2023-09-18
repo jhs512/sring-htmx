@@ -25,7 +25,7 @@ public class ArticleController {
 
     @GetMapping("/listMore")
     @ResponseBody
-    public Map showListMore(long lastId) {
+    public Map getListMore(long lastId) {
         List<Article> articles = articleService.findLatestAfterId(pageItemsCount, lastId);
 
         if (articles.isEmpty())
